@@ -1,0 +1,5 @@
+{
+    "port": 9191,
+    "context":"/app-matrix",
+    "data": "Z:\\app-matrix\\server\\data\\data.json"
+}
