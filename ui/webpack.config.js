@@ -2,6 +2,7 @@ const path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
+    CopyWebpackPlugin = require('copy-webpack-plugin'),
     WEBPACK_MODE = process.env.npm_lifecycle_event
     ;
 
@@ -37,7 +38,11 @@ const config = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
         }),
-        new ExtractTextPlugin('main.css')
+        new ExtractTextPlugin('main.css'),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname, 'src', 'images'),
+            to: path.resolve(__dirname, 'public', 'images')
+        }])
     ]
 };
 

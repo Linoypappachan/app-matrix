@@ -1,15 +1,5 @@
-import '../css/style.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import './sample1.jsx';
 
-import './ticker.jsx';
-
-import './sample-component.jsx';
-
-import './clock.jsx';
-
-import './clock.jsx';
-
-import './forms.jsx';
-
-import './temp-calculator.jsx';
+ReactDOM.render(<h1>App Matrix</h1>, document.querySelector('#container'));
