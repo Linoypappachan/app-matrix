@@ -13,8 +13,12 @@ const express = require('express'),
     Promise = require("bluebird"),
     bodyParser = require('body-parser'),
     config = require('config'),
-    matrix_router = require('./matrix-router'),
-    { init } = require('./utils/file-utils')
+    profile_router = require('./routes/profile-router'),
+    component_router = require('./routes/components-router'),
+    containers_router = require('./routes/containers-router'),
+    databases_router = require('./routes/databases-router'),
+    hosts_router = require('./routes/hosts-router'),
+    { init } = require('./utils/profile/file-utils')
     ;
 
 app.use(bodyParser.json());
@@ -27,7 +31,11 @@ app.use((req, res, next) => {
 });
 
 app.use(config.get('context'), express.static('public'));
-app.use(`${config.get('context')}/api`, matrix_router);
+app.use(`${config.get('context')}/api/profile`, profile_router);
+app.use(`${config.get('context')}/api/component`, component_router);
+app.use(`${config.get('context')}/api/container`, containers_router);
+app.use(`${config.get('context')}/api/database`, databases_router);
+app.use(`${config.get('context')}/api/host`, hosts_router);
 
 init()
 .then(() => {
