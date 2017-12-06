@@ -7,7 +7,7 @@ const path = require('path'),
     ;
 
 const config = {
-    entry: path.resolve(__dirname, 'src', 'js', 'app.js'),
+    entry: path.resolve(__dirname, 'src', 'js', 'index.jsx'),
     output: {
         path: path.resolve(__dirname, 'public'),
         filename: '[name].js'
@@ -19,7 +19,7 @@ const config = {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: ['css-loader', 'postcss-loader']
+                    use: ['css-loader?modules=true', 'postcss-loader']
                 })
             },
             {
