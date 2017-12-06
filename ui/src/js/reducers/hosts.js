@@ -6,5 +6,26 @@ import {
 } from '../actions/types.js';
 
 export default function hosts(state=[], action) {
-    return state;
+    switch (action.type) {
+        case ADD_HOST: {
+            return (
+                [
+                    ...state,
+                    action.host
+                ]
+            );
+        }
+        case UPDATE_HOST: {
+            
+        }
+        case DELETE_HOST: {
+            
+        }
+        case FILTER_HOSTS: {
+            
+        }
+        default: {
+            return state;
+        }
+    }
 }

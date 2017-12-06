@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 import styles from '../../css/style.css';
 
@@ -10,10 +11,9 @@ import Databases from './databases.jsx';
 import Matrix from './matrix.jsx';
 
 
-function Body(props) {
-    let view = props.view;
+function _Body(props) {
     let el = null;
-    switch (view) {
+    switch (props.view) {
         case 'components': {
             el = <Components />;
             break;
@@ -43,5 +43,11 @@ function Body(props) {
         </div>
     )
 }
+
+function mapStateToProps(state) {
+    return { view: state.view };
+}
+
+const Body = connect(mapStateToProps)(_Body);
 
 export default Body;
