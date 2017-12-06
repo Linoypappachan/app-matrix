@@ -4,13 +4,13 @@ const Promise = require("bluebird"),
 
 function addComponent(component) {
     /**
-    * name, layer, healthurl, container , port , mode , hosting 
+    * name, layer, healthurl, port , mode , hosting 
     */
     let _sql = `INSERT INTO components 
         (name, layer, healthurl, container, port, mode, hosting)
         VALUES("${component.name}", "${component.layer}",
-        "${component.healthurl}", "${component.container}", 
-        ${component.port}, "${component.mode}", "${component.hosting}")`;
+        "${component.healthurl}", ${component.port}, "${component.mode}", 
+        "${component.hosting}")`;
     return executeQuery(_sql);
 }
 
@@ -18,7 +18,6 @@ function updateComponent(component) {
     let _sql = `UPDATE components 
         set layer="${component.layer}", 
             healthurl = "${component.healthurl}",
-            container = "${component.container}",
             port = ${component.port},
             mode = "${component.mode}", 
             hosting = "${component.hosting}"
