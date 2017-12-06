@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import styles from '../../css/style.css';
 
 import { add, filter, remove, update } from '../actions/hosts.js';
+import { validateHost } from '../lib/validator.js';
 
 class _Hosts extends React.Component {
     constructor(props) {
@@ -25,7 +26,12 @@ class _Hosts extends React.Component {
     }
 
     addHost() {
-        this.props.addHost({...this.state});
+        if (validateHost(this.state)) {
+            this.props.addHost({...this.state});
+        } else {
+            this.props.showErrorMessage('Host addition failed.');
+        }
+        this.clearForm();
     }
 
     render() {
@@ -67,7 +73,7 @@ class _Hosts extends React.Component {
                                 <th>IP Address</th>
                                 <th>Host Name</th>
                                 <th>Operating System</th>
-                                <th>Delete</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,7 +84,10 @@ class _Hosts extends React.Component {
                                             <td>{c.ipaddr}</td>
                                             <td>{c.hostname}</td>
                                             <td>{c.os}</td>
-                                            <td><button>Delete</button></td>
+                                            <td>
+                                                <button>Edit</button>
+                                                <button>Delete</button>
+                                            </td>
                                         </tr>                            
                                         );                                    
                                     })) : null
@@ -99,6 +108,12 @@ function mapDispatchToProps(dispatch) {
     return ({
         addHost: function(host) {
             dispatch(add(host));
+        },
+        showSuccessMessage: function(text) {
+            alert(text);
+        },
+        showErrorMessage: function(text) {
+            alert(text);
         }
     });
 }

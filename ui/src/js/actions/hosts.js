@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import {
     ADD_HOST,
     UPDATE_HOST,
@@ -5,11 +7,17 @@ import {
     FILTER_HOSTS
 } from './types.js';
 
-export function add(host) {
+export function receiveAdd(host) {
     return ({
         type: ADD_HOST,
         host
     });
+}
+
+export function add(host) {
+    return function(dispatch) {
+
+    }
 }
 
 export function update(host) {

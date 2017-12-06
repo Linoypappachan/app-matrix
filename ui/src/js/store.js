@@ -1,4 +1,5 @@
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 import components from './reducers/components.js';
 import containers from './reducers/containers.js';
@@ -36,7 +37,7 @@ const reducers = combineReducers({
 
 // TODO : matrix in sampleState to be loaded from REST service.
 // const store = createStore(reducers, sampleState);
-const store = createStore(reducers);
+const store = createStore(reducers, applyMiddleware(thunk));
 
 export default store;
 
