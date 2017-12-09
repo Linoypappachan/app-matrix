@@ -11,43 +11,71 @@ import Databases from './databases.jsx';
 import Matrix from './matrix.jsx';
 
 
-function _Body(props) {
-    let el = null;
-    switch (props.view) {
-        case 'components': {
-            el = <Components />;
-            break;
-        }
-        case 'containers': {
-            el = <Containers />;
-            break;
-        }
-        case 'hosts': {
-            el = <Hosts />;
-            break;
-        }
-        case 'databases': {
-            el = <Databases />;
-            break;
-        }
-        default: {
-            el = <Matrix />;
-        }
-            
+import { fetchHosts } from '../actions/hosts.js';
+
+class _Body extends React.Component {
+    constructor(props) {
+        super(props);
     }
-    return (
-        <div>
-            {
-                el
+
+    render() {
+        let el = null;
+        switch (this.props.view) {
+            case 'components': {
+                el = <Components />;
+                break;
             }
-        </div>
-    )
+            case 'containers': {
+                el = <Containers />;
+                break;
+            }
+            case 'hosts': {
+                el = <Hosts />;
+                break;
+            }
+            case 'databases': {
+                el = <Databases />;
+                break;
+            }
+            default: {
+                el = <Matrix />;
+            }
+                
+        }
+        return (
+            <div>
+                {
+                    el
+                }
+            </div>
+        )
+    }
+
+    componentDidMount() {
+        this.props.getData(this.props.view);
+    }
+    
 }
 
 function mapStateToProps(state) {
     return { view: state.view };
 }
 
-const Body = connect(mapStateToProps)(_Body);
+function mapDispatchToProps(dispatch) {
+    return ({
+        getData: function(type) {
+            switch(type) {
+                case 'hosts' : {
+                    dispatch(fetchHosts());
+                    break;
+                }                    
+                default: 
+                    console.log('No type passed');
+            }
+        }
+    });
+}
+
+const Body = connect(mapStateToProps, mapDispatchToProps)(_Body);
 
 export default Body;

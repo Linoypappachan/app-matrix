@@ -1,5 +1,6 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 import components from './reducers/components.js';
 import containers from './reducers/containers.js';
@@ -37,7 +38,11 @@ const reducers = combineReducers({
 
 // TODO : matrix in sampleState to be loaded from REST service.
 // const store = createStore(reducers, sampleState);
-const store = createStore(reducers, applyMiddleware(thunk));
+let _middlewares = [thunk];
+if (WEBPACK_MODE !== 'build') {
+    _middlewares.push(logger);
+}
+const store = createStore(reducers, applyMiddleware(..._middlewares));
 
 export default store;
 

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import styles from '../../css/style.css';
 
-import { add, filter, remove, update } from '../actions/hosts.js';
+import { add, filter, remove, update, fetchHosts } from '../actions/hosts.js';
+import { setMode, clearMode } from '../actions/mode.js';
 import { validateHost } from '../lib/validator.js';
 
 class _Hosts extends React.Component {
@@ -15,6 +16,8 @@ class _Hosts extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.clearForm = this.clearForm.bind(this);
         this.addHost = this.addHost.bind(this);
+        this.editHost = this.editHost.bind(this);
+        this.searchOnKeyPress = this.searchOnKeyPress.bind(this);
     }
 
     handleChange(e) {
@@ -23,6 +26,10 @@ class _Hosts extends React.Component {
 
     clearForm() {
         this.setState({...this.clearState});
+    }
+
+    editHost(host) {
+        this.setState(host);
     }
 
     addHost() {
@@ -34,6 +41,12 @@ class _Hosts extends React.Component {
         this.clearForm();
     }
 
+    searchOnKeyPress(e) {
+        if (e.keyCode === 13) {
+            this.props.searchHosts(this.state);
+        }
+    }
+
     render() {
         // ipaddr, hostname, os
         return (
@@ -43,26 +56,41 @@ class _Hosts extends React.Component {
                         IP Address: 
                         <input name="ipaddr"
                             onChange={this.handleChange}
+                            disabled={this.props.mode === 'edit'}
+                            onKeyUp={this.searchOnKeyPress}
                             type="text" value={this.state.ipaddr}/>
                     </label>
                     <label>
                         Host Name: 
                         <input name="hostname"
                             onChange={this.handleChange}
+                            onKeyUp={this.searchOnKeyPress}
                             type="text" value={this.state.hostname} />
                     </label>
                     <label>
                         Operating System: 
                         <input name="os"
                             onChange={this.handleChange}
+                            onKeyUp={this.searchOnKeyPress}
                             type="text" value={this.state.os} />
                     </label>
                     <br/><br/>
                     <div className={styles.actiongroup}>
                         <button onClick={this.addHost}>Add</button>
-                        <button>Update</button>
-                        <button>Search</button>
-                        <button onClick={this.clearForm}>Clear</button>
+                        <button onClick={ () => { 
+                                this.props.updateHost(this.state); 
+                                this.clearForm();
+                            } 
+                            }>Update</button>
+                        <button onClick={ () => { this.props.searchHosts(this.state); } }>Search</button>
+                        <button onClick={
+                            () => {
+                                this.clearForm();
+                                this.props.switchMode();
+                            }
+                            }>
+                            Clear
+                        </button>
                     </div>
                 </div>
                 <hr/>
@@ -85,8 +113,21 @@ class _Hosts extends React.Component {
                                             <td>{c.hostname}</td>
                                             <td>{c.os}</td>
                                             <td>
-                                                <button>Edit</button>
-                                                <button>Delete</button>
+                                                <button 
+                                                    onClick={ () => { 
+                                                        this.editHost(c); 
+                                                        this.props.switchMode('edit');
+                                                    } }>
+                                                    Edit
+                                                </button>
+                                                <button 
+                                                    onClick={ 
+                                                        () => { 
+                                                            this.props.removeHost(c.ipaddr); 
+                                                        } 
+                                                    }>
+                                                    Delete
+                                                </button>
                                             </td>
                                         </tr>                            
                                         );                                    
@@ -101,7 +142,7 @@ class _Hosts extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { hosts: state.hosts };
+    return { hosts: state.hosts, mode: state.mode };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -109,11 +150,27 @@ function mapDispatchToProps(dispatch) {
         addHost: function(host) {
             dispatch(add(host));
         },
+        updateHost: function(host) {
+            dispatch(update(host));
+        },
+        switchMode: function(mode) {
+            if (mode) {
+                dispatch(setMode(mode));
+            } else {
+                dispatch(clearMode());
+            }
+        },
+        removeHost: function(ipaddr) {
+            dispatch(remove(ipaddr));
+        },
         showSuccessMessage: function(text) {
             alert(text);
         },
         showErrorMessage: function(text) {
             alert(text);
+        },
+        searchHosts: function(host) {
+            dispatch(fetchHosts(host));
         }
     });
 }

@@ -1,11 +1,10 @@
 import fetch from 'isomorphic-fetch';
 
 import {
-    ADD_HOST,
-    UPDATE_HOST,
-    DELETE_HOST,
-    FILTER_HOSTS
+    FETCH_HOSTS
 } from './types.js';
+
+import { buildHostsQuery } from '../lib/query.builder.js';
 
 export function add(host) {
     return function(dispatch) {
@@ -20,7 +19,7 @@ export function add(host) {
         })
         .then((json) => {
             if (json.status && json.status.toLowerCase() === 'ok') {
-                dispatch(receiveAdd(host));
+                dispatch(fetchHosts());
             } else {
                 console.log(json);
             }
@@ -32,28 +31,78 @@ export function add(host) {
 }
 
 export function update(host) {
-    return ({
-        type: UPDATE_HOST,
-        host
-    });
+    return function(dispatch) {
+        let form = new FormData();
+        form.append("host", JSON.stringify(host));
+        fetch(`${REST_URL_BASE}/host/update`, {
+            method: 'POST',
+            body: form
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((json) => {
+            if (json.status && json.status.toLowerCase() === 'ok') {
+                dispatch(fetchHosts());
+            } else {
+                console.log(json);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
 }
 
 export function receiveHosts(hosts) {
     return ({
-        type: FILTER_HOSTS,
+        type: FETCH_HOSTS,
         hosts
     });
 }
 
-export function filter(host) {
-    return function(host) {
-        
+export function fetchHosts(host) {
+    return function(dispatch) {
+        let _query = buildHostsQuery(host);
+        let form = new FormData();
+        form.append("query", _query);
+        fetch(`${REST_URL_BASE}/host`, {
+            method: 'POST',
+            body: form
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((json) => {
+            if (json.status && json.status.toLowerCase() === 'ok') {
+                dispatch(receiveHosts(json.data));
+            } else {
+                console.log(json);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
 }
 
 export function remove(ipaddr) {
-    return ({
-        type: DELETE_HOST,
-        ipaddr
-    });
+    return function(dispatch) {
+        fetch(`${REST_URL_BASE}/host/delete?ipaddr=${ipaddr}`, {
+            method: 'GET'
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((json) => {
+            if (json.status && json.status.toLowerCase() === 'ok') {
+                dispatch(fetchHosts());
+            } else {
+                console.log(json);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
 }

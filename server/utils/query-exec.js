@@ -3,6 +3,7 @@ const Promise = require("bluebird"),
     ;
 
 function executeQuery(query) {
+    console.log(query);
     return (
         new Promise((resolve, reject) => {
             db.serialize(function() {
@@ -19,10 +20,11 @@ function executeQuery(query) {
 }
 
 function executeSelectQuery(query) {
+    console.log(query);
     return (
         new Promise((resolve, reject) => {
             db.serialize(function() {
-                db.all(query, [], (err, rows) => {
+                db.all(query, (err, rows) => {
                     if (err) {
                         reject(err);
                     } else {

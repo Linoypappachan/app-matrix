@@ -8,10 +8,7 @@ export const UPDATE_CONTAINER = 'UPDATE_CONTAINER';
 export const DELETE_CONTAINER = 'DELETE_CONTAINER';
 export const FILTER_CONTAINERS = 'FILTER_CONTAINERS';
 
-export const ADD_HOST = 'ADD_HOST';
-export const UPDATE_HOST = 'UPDATE_HOST';
-export const DELETE_HOST = 'DELETE_HOST';
-export const FILTER_HOSTS = 'FILTER_HOSTS';
+export const FETCH_HOSTS = 'FETCH_HOSTS';
 
 export const ADD_DATABASE = 'ADD_DATABASE';
 export const UPDATE_DATABASE = 'UPDATE_DATABASE';
