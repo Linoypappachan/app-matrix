@@ -6,13 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --color",
-    "build": "rimraf public && webpack",
+    "build": "rimraf ../server/public && webpack",
     "watch": "webpack --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "autoprefixer": "^7.1.6",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

@@ -30,7 +30,10 @@ function deleteHost(ipaddr) {
 }
 
 function getHosts(query) {
-    let _sql = `SELECT * FROM hosts where ${query}`;
+    let _sql = `SELECT * FROM hosts order by ipaddr`;
+    if (query) {
+        _sql = `SELECT * FROM hosts where ${query} order by ipaddr`;
+    }
     return executeSelectQuery(_sql);
 }
 

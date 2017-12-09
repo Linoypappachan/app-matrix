@@ -1,6 +1,6 @@
 {
     "port": 9191,
     "context":"/app-matrix",
-    "data": "Z:\\PROJECTS\\IN_PROGRESS\\app-matrix\\server\\data\\data.json",
-    "db":"Z:\\PROJECTS\\IN_PROGRESS\\app-matrix\\server\\data\\appmatrix.db"
+    "data": "/Users/muqsithirfan/Development/office/app-matrix/server/data/data.json",
+    "db":"/Users/muqsithirfan/Development/office/app-matrix/server/data/appmatrix.db"
 }

@@ -1,15 +1,17 @@
 const path = require('path'),
+    webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
-    WEBPACK_MODE = process.env.npm_lifecycle_event
+    WEBPACK_MODE = process.env.npm_lifecycle_event,
+    output_dir = path.resolve(__dirname, '..', 'server', 'public')
     ;
 
 const config = {
     entry: path.resolve(__dirname, 'src', 'js', 'index.jsx'),
     output: {
-        path: path.resolve(__dirname, 'public'),
+        path: output_dir,
         filename: '[name].js'
     },
     devtool: (WEBPACK_MODE === 'build') ? false : 'source-map',
@@ -30,7 +32,7 @@ const config = {
         ]
     },
     devServer: {
-        contentBase: path.join(__dirname, "public"),
+        contentBase: output_dir,
         compress: true,
         port: 8888
     },
@@ -38,10 +40,17 @@ const config = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
         }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': (WEBPACK_MODE === 'build') 
+                ? JSON.stringify('production') : JSON.stringify('development'),
+            WEBPACK_MODE : JSON.stringify(WEBPACK_MODE),
+            REST_URL_BASE :
+                JSON.stringify(`http://localhost:9191/app-matrix/api`)
+        }),
         new ExtractTextPlugin('main.css'),
         new CopyWebpackPlugin([{
             from: path.resolve(__dirname, 'src', 'images'),
-            to: path.resolve(__dirname, 'public', 'images')
+            to: path.resolve(output_dir, 'images')
         }])
     ]
 };

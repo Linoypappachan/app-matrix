@@ -16,13 +16,15 @@ export default function hosts(state=[], action) {
             );
         }
         case UPDATE_HOST: {
-            
+            return state;
         }
         case DELETE_HOST: {
-            
+            return state;
         }
         case FILTER_HOSTS: {
-            
+            return ([
+                ...action.hosts
+            ]);
         }
         default: {
             return state;

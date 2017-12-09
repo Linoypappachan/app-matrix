@@ -7,16 +7,27 @@ import {
     FILTER_HOSTS
 } from './types.js';
 
-export function receiveAdd(host) {
-    return ({
-        type: ADD_HOST,
-        host
-    });
-}
-
 export function add(host) {
     return function(dispatch) {
-
+        let form = new FormData();
+        form.append("host", JSON.stringify(host));
+        fetch(`${REST_URL_BASE}/host/add`, {
+            method: 'POST',
+            body: form
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((json) => {
+            if (json.status && json.status.toLowerCase() === 'ok') {
+                dispatch(receiveAdd(host));
+            } else {
+                console.log(json);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
 }
 
@@ -27,11 +38,17 @@ export function update(host) {
     });
 }
 
-export function filter(host) {
+export function receiveHosts(hosts) {
     return ({
         type: FILTER_HOSTS,
-        host
+        hosts
     });
+}
+
+export function filter(host) {
+    return function(host) {
+        
+    }
 }
 
 export function remove(ipaddr) {
